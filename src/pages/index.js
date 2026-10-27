@@ -62,18 +62,31 @@ const BlogIndex = ({ data, location }) => {
           )
         })}
       </ol>
-      {hasMorePosts && (
+      <p className="visually-hidden" aria-live="polite">
+        {`게시글 ${Math.min(visibleCount, posts.length)}개 표시 중`}
+      </p>
+      {posts.length > POSTS_PER_PAGE && (
         <button
           type="button"
           className="load-more-button"
-          aria-label="이전 게시글 6개 더 보기"
-          onClick={() =>
-            setVisibleCount(count =>
-              Math.min(count + POSTS_PER_PAGE, posts.length)
-            )
+          aria-label={
+            hasMorePosts
+              ? `이전 게시글 ${Math.min(
+                  POSTS_PER_PAGE,
+                  posts.length - visibleCount
+                )}개 더 보기`
+              : undefined
           }
+          aria-disabled={!hasMorePosts}
+          onClick={() => {
+            if (hasMorePosts) {
+              setVisibleCount(count =>
+                Math.min(count + POSTS_PER_PAGE, posts.length)
+              )
+            }
+          }}
         >
-          더 보기
+          {hasMorePosts ? "더 보기" : "모든 게시글을 표시했습니다"}
         </button>
       )}
     </Layout>
