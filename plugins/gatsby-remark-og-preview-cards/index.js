@@ -58,7 +58,10 @@ async function fetchOg(url) {
       headers: { "User-Agent": UA, Accept: "text/html" },
       redirect: "follow",
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.warn(`[og-cards] non-OK response (${res.status}) for ${url}`);
+      return null;
+    }
     const contentType = res.headers.get("content-type") || "";
     if (!contentType.includes("text/html")) return null;
     const html = (await res.text()).slice(0, MAX_HTML);
@@ -66,24 +69,25 @@ async function fetchOg(url) {
     // og: tags can appear as property-then-content or content-then-property
     const pick = pattern => {
       const match = html.match(pattern);
-      return match ? decodeEntities(match[1]) : null;
+      if (!match) return null;
+      return decodeEntities(match[1] !== undefined ? match[1] : match[2]);
     };
     const ogTitle =
-      pick(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']*)["']/i) ||
-      pick(/<meta[^>]+content=["']([^"']*)["'][^>]+property=["']og:title["']/i);
+      pick(/<meta[^>]+property=["']og:title["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i) ||
+      pick(/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:title["']/i);
     const title =
       trimOrNull(ogTitle) ||
       trimOrNull(pick(/<title[^>]*>([^<]*)<\/title>/i));
     if (!title) return null;
 
     const description = trimOrNull(
-      pick(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']*)["']/i) ||
-        pick(/<meta[^>]+content=["']([^"']*)["'][^>]+property=["']og:description["']/i)
+      pick(/<meta[^>]+property=["']og:description["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i) ||
+        pick(/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:description["']/i)
     );
 
     let image = trimOrNull(
-      pick(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']*)["']/i) ||
-        pick(/<meta[^>]+content=["']([^"']*)["'][^>]+property=["']og:image["']/i)
+      pick(/<meta[^>]+property=["']og:image["'][^>]+content=(?:"([^"]*)"|'([^']*)')/i) ||
+        pick(/<meta[^>]+content=(?:"([^"]*)"|'([^']*)')[^>]+property=["']og:image["']/i)
     );
     if (image) {
       try {
@@ -95,6 +99,7 @@ async function fetchOg(url) {
 
     return { title, description, image, host: new URL(url).host };
   } catch (e) {
+    console.warn(`[og-cards] fetch failed for ${url}:`, (e && e.message) || e);
     return null;
   } finally {
     clearTimeout(timer);
