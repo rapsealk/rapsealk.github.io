@@ -115,17 +115,35 @@ async function getOg(url) {
   return cache[url];
 }
 
-function isStandaloneLinkParagraph(node) {
+const isExternalLink = node =>
+  node.type === "link" && /^https?:\/\//i.test(node.url || "");
+
+function isCardCandidateParagraph(node) {
   if (
     !node ||
     node.type !== "paragraph" ||
     !Array.isArray(node.children) ||
-    node.children.length !== 1
+    node.children.length === 0
   ) {
     return false;
   }
-  const child = node.children[0];
-  return child.type === "link" && /^https?:\/\//i.test(child.url || "");
+  const links = node.children.filter(isExternalLink);
+  if (links.length !== 1) return false;
+  const rest = node.children.filter(c => !isExternalLink(c));
+  if (rest.length === 0) return true; // standalone: exactly one external link
+  // labeled form: a short plain-text label ending in a colon, with the link last
+  // (e.g. `원문: <url>`, `참고: <url>`)
+  if (node.children[node.children.length - 1] !== links[0]) return false;
+  const label = rest
+    .map(c => (c.type === "text" ? c.value : ""))
+    .join("")
+    .trim();
+  return (
+    rest.every(c => c.type === "text") &&
+    label.length > 0 &&
+    label.length <= 40 &&
+    /[:：]$/.test(label)
+  );
 }
 
 module.exports = async ({ markdownAST, markdownNode }) => {
@@ -133,7 +151,7 @@ module.exports = async ({ markdownAST, markdownNode }) => {
   const walk = node => {
     if (!Array.isArray(node.children)) return;
     node.children.forEach((child, index) => {
-      if (isStandaloneLinkParagraph(child)) {
+      if (isCardCandidateParagraph(child)) {
         targets.push({ parent: node, index, paragraph: child });
       } else {
         walk(child);
@@ -143,7 +161,7 @@ module.exports = async ({ markdownAST, markdownNode }) => {
   walk(markdownAST);
 
   for (const { parent, index, paragraph } of targets) {
-    const url = paragraph.children[0].url;
+    const url = paragraph.children.find(isExternalLink).url;
     const data = await getOg(url);
     if (!data) continue; // graceful fallback: leave the original link untouched
 
