@@ -58,6 +58,9 @@ typings/
 .cache/
 public
 
+# hermes agent workspace (plans, notes)
+.hermes/
+
 # Mac files
 .DS_Store
 
