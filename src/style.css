@@ -314,6 +314,11 @@ a:focus {
   color: var(--color-text-light);
 }
 
+html.dark .load-more-button:hover,
+html.dark .load-more-button:focus {
+  color: #121212;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -446,7 +451,7 @@ html.dark {
   --color-text-light: #a6a6a6;
   --color-heading: #f5f5f5;
   --color-heading-black: #ffffff;
-  --color-accent: #2e2e2e;
+  --color-accent: #4a4a4a;
   --color-primary: #ff7a2f;
   color-scheme: dark;
 }
@@ -514,6 +519,18 @@ html.dark .token.operator,
 html.dark .token.entity,
 html.dark .token.url {
   color: #c5c8c6;
+  background: transparent;
+}
+
+html.dark .language-css .token.string,
+html.dark .style .token.string {
+  color: #b5bd68;
+  background: transparent;
+}
+
+html.dark pre[class*="language-"],
+html.dark code[class*="language-"] {
+  text-shadow: none;
 }
 
 html.dark .token.atrule,
