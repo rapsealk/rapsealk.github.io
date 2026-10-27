@@ -118,7 +118,7 @@ async function getOg(url) {
 const isExternalLink = node =>
   node.type === "link" && /^https?:\/\//i.test(node.url || "");
 
-function isCardCandidateParagraph(node) {
+function isCardCandidateParagraph(node, isRoot) {
   if (
     !node ||
     node.type !== "paragraph" ||
@@ -131,8 +131,11 @@ function isCardCandidateParagraph(node) {
   if (links.length !== 1) return false;
   const rest = node.children.filter(c => !isExternalLink(c));
   if (rest.length === 0) return true; // standalone: exactly one external link
-  // labeled form: a short plain-text label ending in a colon, with the link last
-  // (e.g. `원문: <url>`, `참고: <url>`)
+  // labeled form: root-level paragraphs only (never blockquotes or list
+  // items, so attribution lines like `> 링크:` / `- 출처:` stay plain), a
+  // short plain-text label ending in a colon with the link last, and no
+  // markdown-artifact prefixes (`> `, `- `, `* `, `+ `, `#`).
+  if (!isRoot) return false;
   if (node.children[node.children.length - 1] !== links[0]) return false;
   const label = rest
     .map(c => (c.type === "text" ? c.value : ""))
@@ -142,23 +145,24 @@ function isCardCandidateParagraph(node) {
     rest.every(c => c.type === "text") &&
     label.length > 0 &&
     label.length <= 40 &&
-    /[:：]$/.test(label)
+    /[:：]$/.test(label) &&
+    !/^[>\-*+#]/.test(label)
   );
 }
 
 module.exports = async ({ markdownAST, markdownNode }) => {
   const targets = [];
-  const walk = node => {
+  const walk = (node, isRoot) => {
     if (!Array.isArray(node.children)) return;
     node.children.forEach((child, index) => {
-      if (isCardCandidateParagraph(child)) {
+      if (isCardCandidateParagraph(child, isRoot)) {
         targets.push({ parent: node, index, paragraph: child });
       } else {
-        walk(child);
+        walk(child, false);
       }
     });
   };
-  walk(markdownAST);
+  walk(markdownAST, true);
 
   for (const { parent, index, paragraph } of targets) {
     const url = paragraph.children.find(isExternalLink).url;
@@ -172,7 +176,10 @@ module.exports = async ({ markdownAST, markdownNode }) => {
             data.host
           )}&sz=128`
         );
-    const image = `<img class="og-card-image" src="${thumbnail}" alt="" loading="lazy" decoding="async" />`;
+    const faviconSrc = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(
+      data.host
+    )}&sz=128`;
+    const image = `<img class="og-card-image" src="${thumbnail}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${faviconSrc}';" />`;
     const description = data.description
       ? `<span class="og-card-desc">${escapeHtml(data.description)}</span>`
       : "";
