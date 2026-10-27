@@ -278,6 +278,27 @@ a:focus {
   margin-bottom: var(--spacing-4);
 }
 
+.load-more-button {
+  display: block;
+  margin: var(--spacing-12) auto var(--spacing-0);
+  padding: var(--spacing-2) var(--spacing-6);
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-1);
+  font-weight: var(--fontWeight-bold);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.load-more-button:hover,
+.load-more-button:focus {
+  background: var(--color-primary);
+  color: white;
+}
+
 .header-link-home {
   font-weight: var(--fontWeight-bold);
   font-family: var(--font-heading);

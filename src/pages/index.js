@@ -5,9 +5,13 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
+const POSTS_PER_PAGE = 6
+
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const posts = data.allMarkdownRemark.nodes
+  const [visibleCount, setVisibleCount] = React.useState(POSTS_PER_PAGE)
+  const hasMorePosts = visibleCount < posts.length
 
   if (posts.length === 0) {
     return (
@@ -26,11 +30,12 @@ const BlogIndex = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <Bio />
       <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
+        {posts.map((post, index) => {
           const title = post.frontmatter.title || post.fields.slug
+          const isHidden = index >= visibleCount
 
           return (
-            <li key={post.fields.slug}>
+            <li key={post.fields.slug} hidden={isHidden}>
               <article
                 className="post-list-item"
                 itemScope
@@ -57,6 +62,20 @@ const BlogIndex = ({ data, location }) => {
           )
         })}
       </ol>
+      {hasMorePosts && (
+        <button
+          type="button"
+          className="load-more-button"
+          aria-label="이전 게시글 6개 더 보기"
+          onClick={() =>
+            setVisibleCount(count =>
+              Math.min(count + POSTS_PER_PAGE, posts.length)
+            )
+          }
+        >
+          더 보기
+        </button>
+      )}
     </Layout>
   )
 }
