@@ -60,6 +60,38 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       })
     })
   }
+
+  // Meta-refresh redirects for post URLs renamed when introducing
+  // semantic slugs (previously bare tistory IDs). Keeps old links alive.
+  const redirects = {
+    "/1/": "/speech-emotion-recognition/",
+    "/2/": "/geth-new-account/",
+    "/3/": "/grading-automation/",
+    "/4/": "/hexo-blog/",
+    "/5/": "/2019-07-04/",
+    "/6/": "/2019-07-05/",
+    "/9/": "/python-tcp-socket-recv/",
+    "/10/": "/vscode-remote-coding/",
+    "/11/": "/spiking-neural-networks/",
+    "/12/": "/2019-retrospective/",
+    "/13/": "/reading-list/",
+    "/14/": "/kotlin-keywords/",
+    "/15/": "/privacy-policy/",
+    "/16/": "/ptr/",
+    "/17/": "/windows-virtualenv/",
+    "/18/": "/oss-contribution/",
+    "/19/": "/vscode-docker-remote-coding/",
+    "/20/": "/web-drop-event/",
+    "/24/": "/2022-retrospective/",
+    "/25/": "/bitsandbytes-issue/",
+  }
+  Object.entries(redirects).forEach(([fromPath, toPath]) => {
+    createPage({
+      path: fromPath,
+      component: path.resolve(`./src/templates/redirect.js`),
+      context: { to: toPath },
+    })
+  })
 }
 
 /**
