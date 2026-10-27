@@ -1,0 +1,11 @@
+{
+  "name": "gatsby-remark-og-preview-cards",
+  "version": "1.0.0",
+  "description": "Turns standalone external links into lazy-loaded OpenGraph preview cards (metadata fetched at build time, cached on disk).",
+  "main": "index.js",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

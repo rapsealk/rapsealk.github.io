@@ -1,0 +1,65 @@
+{
+  "https://towardsdatascience.com/facebook-builds-an-ai-agent-to-master-the-hanabi-challenge-the-new-frontier-for-ai-research-db4764fd49fc": null,
+  "https://go.dev/blog/cgo": {
+    "title": "C? Go? Cgo! - The Go Programming Language",
+    "description": null,
+    "image": null,
+    "host": "go.dev"
+  },
+  "https://musiclab.chromeexperiments.com/Spectrogram/": {
+    "title": "Chrome Music Lab",
+    "description": "Music is for everyone. Play with simple experiments that let anyone, of any age, explore how music works.",
+    "image": "https://musiclab.chromeexperiments.com/static/share.jpg",
+    "host": "musiclab.chromeexperiments.com"
+  },
+  "https://github.com/rapsealk/socketx": {
+    "title": "GitHub - rapsealk/socketx",
+    "description": "Contribute to rapsealk/socketx development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/51aadc51632cc94214486f4376273deb2db2ee88802a8f3506dd67bd727773d3/rapsealk/socketx",
+    "host": "github.com"
+  },
+  "https://blog.lablup.com/posts/2022/11/29/introduce-fasttrack": null,
+  "https://musiclab.chromeexperiments.com/spectrogram-service/?ln=ko": {
+    "title": "3D Spectrogram",
+    "description": null,
+    "image": null,
+    "host": "musiclab.chromeexperiments.com"
+  },
+  "https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html": {
+    "title": "6.3. Device Management — CUDA Runtime API Reference Manual 13.4 documentation",
+    "description": null,
+    "image": null,
+    "host": "docs.nvidia.com"
+  },
+  "https://arxiv.org/abs/1902.00506?fbclid=IwAR2XnX55JT3Fr1LawuZT2SOHZpo4oWOjRfAhz1fdKc37-FaODMnM5GOSmGM": {
+    "title": "The Hanabi Challenge: A New Frontier for AI Research",
+    "description": "From the early days of computing, games have been important testbeds for studying how well machines can do sophisticated decision making. In recent years, machine learning has made dramatic advances with artificial agents reaching superhuman performance in challenge domains like Go, Atari, and some variants of poker. As with their predecessors of chess, checkers, and backgammon, these game domains have driven research by providing sophisticated yet well-defined challenges for artificial intelligence practitioners. We continue this tradition by proposing the game of Hanabi as a new challenge domain with novel problems that arise from its combination of purely cooperative gameplay with two to five players and imperfect information. In particular, we argue that Hanabi elevates reasoning about the beliefs and intentions of other agents to the foreground. We believe developing novel techniques for such theory of mind reasoning will not only be crucial for success in Hanabi, but also in broader collaborative efforts, especially those with human partners. To facilitate future research, we introduce the open-source Hanabi Learning Environment, propose an experimental framework for the research community to evaluate algorithmic advances, and assess the performance of current state-of-the-art techniques.",
+    "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+    "host": "arxiv.org"
+  },
+  "https://musiclab.chromeexperiments.com/js/app.js": null,
+  "https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations": {
+    "title": "Drag operations - Web APIs | MDN",
+    "description": null,
+    "image": null,
+    "host": "developer.mozilla.org"
+  },
+  "https://arxiv.org/abs/1912.02318?fbclid=IwAR0xDUuoiHEUkH0CQVmMsoTq806BRNcjKY19f6HFIFvtJkjU3pqWIkKpWD0": {
+    "title": "Improving Policies via Search in Cooperative Partially Observable Games",
+    "description": "Recent superhuman results in games have largely been achieved in a variety of zero-sum settings, such as Go and Poker, in which agents need to compete against others. However, just like humans, real-world AI systems have to coordinate and communicate with other agents in cooperative partially observable environments as well. These settings commonly require participants to both interpret the actions of others and to act in a way that is informative when being interpreted. Those abilities are typically summarized as theory f mind and are seen as crucial for social interactions. In this paper we propose two different search techniques that can be applied to improve an arbitrary agreed-upon policy in a cooperative partially observable game. The first one, single-agent search, effectively converts the problem into a single agent setting by making all but one of the agents play according to the agreed-upon policy. In contrast, in multi-agent search all agents carry out the same common-knowledge search procedure whenever doing so is computationally feasible, and fall back to playing according to the agreed-upon policy otherwise. We prove that these search procedures are theoretically guaranteed to at least maintain the original performance of the agreed-upon policy (up to a bounded approximation error). In the benchmark challenge problem of Hanabi, our search technique greatly improves the performance of every agent we tested and when applied to a policy trained using RL achieves a new state-of-the-art score of 24.61 / 25 in the game, compared to a previous-best of 24.08 / 25.",
+    "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+    "host": "arxiv.org"
+  },
+  "https://developer.mozilla.org/ko/docs/Web/API/DataTransfer": {
+    "title": "DataTransfer - Web API | MDN",
+    "description": null,
+    "image": null,
+    "host": "developer.mozilla.org"
+  },
+  "https://api.jquery.com/category/events/event-object/": {
+    "title": "Event Object | jQuery API Documentation",
+    "description": null,
+    "image": null,
+    "host": "api.jquery.com"
+  }
+}
