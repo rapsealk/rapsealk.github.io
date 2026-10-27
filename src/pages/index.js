@@ -5,9 +5,13 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
+const POSTS_PER_PAGE = 6
+
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const posts = data.allMarkdownRemark.nodes
+  const [visibleCount, setVisibleCount] = React.useState(POSTS_PER_PAGE)
+  const hasMorePosts = visibleCount < posts.length
 
   if (posts.length === 0) {
     return (
@@ -26,11 +30,12 @@ const BlogIndex = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <Bio />
       <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
+        {posts.map((post, index) => {
           const title = post.frontmatter.title || post.fields.slug
+          const isHidden = index >= visibleCount
 
           return (
-            <li key={post.fields.slug}>
+            <li key={post.fields.slug} hidden={isHidden}>
               <article
                 className="post-list-item"
                 itemScope
@@ -57,6 +62,33 @@ const BlogIndex = ({ data, location }) => {
           )
         })}
       </ol>
+      <p className="visually-hidden" aria-live="polite">
+        {`게시글 ${Math.min(visibleCount, posts.length)}개 표시 중`}
+      </p>
+      {posts.length > POSTS_PER_PAGE && (
+        <button
+          type="button"
+          className="load-more-button"
+          aria-label={
+            hasMorePosts
+              ? `이전 게시글 ${Math.min(
+                  POSTS_PER_PAGE,
+                  posts.length - visibleCount
+                )}개 더 보기`
+              : undefined
+          }
+          aria-disabled={!hasMorePosts}
+          onClick={() => {
+            if (hasMorePosts) {
+              setVisibleCount(count =>
+                Math.min(count + POSTS_PER_PAGE, posts.length)
+              )
+            }
+          }}
+        >
+          {hasMorePosts ? "더 보기" : "모든 게시글을 표시했습니다"}
+        </button>
+      )}
     </Layout>
   )
 }

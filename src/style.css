@@ -278,6 +278,52 @@ a:focus {
   margin-bottom: var(--spacing-4);
 }
 
+.load-more-button {
+  display: block;
+  min-height: 44px;
+  margin: var(--spacing-12) auto var(--spacing-0);
+  padding: var(--spacing-2) var(--spacing-6);
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-1);
+  font-weight: var(--fontWeight-bold);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.load-more-button:hover,
+.load-more-button:focus {
+  background: var(--color-primary);
+  color: white;
+}
+
+.load-more-button[aria-disabled="true"] {
+  color: var(--color-text-light);
+  border-color: var(--color-accent);
+  cursor: default;
+}
+
+.load-more-button[aria-disabled="true"]:hover,
+.load-more-button[aria-disabled="true"]:focus {
+  background: transparent;
+  color: var(--color-text-light);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .header-link-home {
   font-weight: var(--fontWeight-bold);
   font-family: var(--font-heading);
