@@ -54,6 +54,7 @@
   --fontSize-6: 2.488rem;
   --fontSize-7: 2.986rem;
   --color-primary: #cb4a0d;
+  --bg: #ffffff;
   --color-text: #2e353f;
   --color-text-light: #4f5969;
   --color-heading: #1a202c;
@@ -77,9 +78,10 @@ html {
 }
 
 body {
+  background: var(--bg);
+  color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--fontSize-1);
-  color: var(--color-text);
 }
 
 footer {
@@ -312,6 +314,11 @@ a:focus {
   color: var(--color-text-light);
 }
 
+html.dark .load-more-button:hover,
+html.dark .load-more-button:focus {
+  color: #121212;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -435,4 +442,139 @@ a:focus {
 pre[class*="language-"],
 code[class*="language-"] {
   font-family: Monaco, Consolas, "Andale Mono", "Ubuntu Mono", monospace !important;
+}
+
+/* dark mode: toggled via html.dark (see src/components/theme-toggle.js) */
+html.dark {
+  --bg: #121212;
+  --color-text: #e6e6e6;
+  --color-text-light: #a6a6a6;
+  --color-heading: #f5f5f5;
+  --color-heading-black: #ffffff;
+  --color-accent: #4a4a4a;
+  --color-primary: #ff7a2f;
+  color-scheme: dark;
+}
+
+html.dark body {
+  background: var(--bg);
+}
+
+html.dark body,
+html.dark .global-header,
+html.dark .og-card {
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+html.dark .gatsby-highlight pre[class*="language-"],
+html.dark pre[class*="language-"] {
+  background: #1e1e1e;
+  color: #c5c8c6;
+}
+
+html.dark code[class*="language-"] {
+  color: #c5c8c6;
+}
+
+html.dark :not(pre) > code[class*="language-"] {
+  background: #2e2e2e;
+}
+
+/* dark Prism tokens (tomorrow palette) */
+html.dark .token.comment,
+html.dark .token.prolog,
+html.dark .token.doctype,
+html.dark .token.cdata {
+  color: #969896;
+}
+
+html.dark .token.punctuation {
+  color: #c5c8c6;
+}
+
+html.dark .token.property,
+html.dark .token.tag,
+html.dark .token.constant,
+html.dark .token.symbol,
+html.dark .token.deleted {
+  color: #cc6666;
+}
+
+html.dark .token.boolean,
+html.dark .token.number {
+  color: #de935f;
+}
+
+html.dark .token.selector,
+html.dark .token.attr-name,
+html.dark .token.string,
+html.dark .token.char,
+html.dark .token.builtin,
+html.dark .token.inserted {
+  color: #b5bd68;
+}
+
+html.dark .token.operator,
+html.dark .token.entity,
+html.dark .token.url {
+  color: #c5c8c6;
+  background: transparent;
+}
+
+html.dark .language-css .token.string,
+html.dark .style .token.string {
+  color: #b5bd68;
+  background: transparent;
+}
+
+html.dark pre[class*="language-"],
+html.dark code[class*="language-"] {
+  text-shadow: none;
+}
+
+html.dark .token.atrule,
+html.dark .token.attr-value,
+html.dark .token.keyword {
+  color: #b294bb;
+}
+
+html.dark .token.function,
+html.dark .token.class-name {
+  color: #81a2be;
+}
+
+html.dark .token.important,
+html.dark .token.regex,
+html.dark .token.variable {
+  color: #ff8a3d;
+}
+
+/* theme toggle */
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.theme-toggle {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: transparent;
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+  border-color: var(--color-primary);
 }
