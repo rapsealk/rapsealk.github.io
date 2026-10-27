@@ -1,0 +1,92 @@
+---
+title: Go언어와 CUDA Runtime API(cudart)
+date: "2022-04-24"
+---
+
+기존에 Python으로 작성했던 프로젝트를 Go로 다시 작성하는 과정에서 CUDA와 관련하여 문제가 발생했다. Python의 경우 [cuda-python](https://developer.nvidia.com/cuda-python)이라는 [패키지](https://pypi.org/project/cuda-python/)가 공식적으로 지원되는 데 반해, 아직 Go에는 그런 것이 존재하지 않았다. Go에서 CUDA의 기능을 이용하기 위한 방법들을 찾아보다가, [**cgo**](https://go.dev/blog/cgo)라는 것을 이용하여 C 코드를 실행할 수 있다는 것을 알 수 있었다. [cgo](https://go.dev/blog/cgo)에 대한 자세한 내용은 아래의 글을 참고하시기 바란다.
+
+[C? Go? Cgo! - The Go Programming Language](https://go.dev/blog/cgo)
+
+cgo를 사용하기 위해서는 import "C" 구문 바로 이전에 주석의 형태로 C 코드를 작성하면 되는데, 이것을 preamble이라고 부른다. 이렇게 작성된 코드는 Go 런타임에서 C 패키지를 통해 접근이 가능해진다. 또한 #cgo 지시자를 통해 컴파일러에 옵션을 전달할 수 있다. 이 글에서는 gcc를 사용하였으며, CUDA Runtime API를 사용하기 위하여 아래와 같은 형태로 작성하였다.
+
+```go
+// #cgo CFLAGS: -I/usr/local/cuda/include
+// #cgo LDFLAGS: -L/usr/local/cuda/lib64 -lcudart
+// #include <cuda_runtime_api.h>
+import "C"
+```
+
+이제 Go에서 CUDA Runtime API를 사용할 수 있게 되었다. 코드를 작성하기에 앞서, 아래의 문서를 통해 CUDA Runtime API의 명세를 확인할 수 있다.(본 글에서는 cudaGetDeviceCount, cudaGetDeviceProperties 등 Device Management 관련 API만을 사용한다.)
+
+[CUDA Runtime API :: CUDA Toolkit Documentation (nvidia.com)](https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html)
+
+이제 본격적으로 Go 코드를 작성해 보도록 하겠다.
+ 
+1. cudaGetDeviceCount
+cudaGetDeviceCount는 사용 가능한 CUDA Device의 갯수를 읽어오는 함수로, 그 명세는 아래와 같다.
+
+```c
+__host____device__cudaError_t cudaGetDeviceCount ( int* count )
+```
+
+함수에 전달한 int형 주소값인 count를 역참조하여 CUDA Device의 갯수 정보를 입력하고, 함수의 반환값으로는 에러의 유무를 전달하여 정상적으로 처리되었는지를 알 수 있게 한다. 이 API를 Go로 사용하기 위하여 아래와 같이 작성할 수 있다.
+
+```go
+import "errors"
+
+var ErrCUDAInvalidValue = errors.New("This indicates that one or more..")
+
+func GetDeviceCount() (int32, error) {
+    var deviceCount C.int
+    if C.cudaGetDeviceCount(&deviceCount) != 0 {
+        return 0, ErrCUDAInvalidValue
+    }
+    return int32(deviceCount), nil
+}
+```
+
+이때 C 함수에는 *C.int 자료형을 전달하고, Go 함수에서 반환할 때는 int32 자료형으로 변환했음에 유의하자.
+ 
+2. cudaGetDeviceProperties
+cudaGetDeviceProperties는 n번째 CUDA Device의 정보를 읽어오는 함수로, 그 명세는 아래와 같다.
+
+```c
+__host__cudaError_t cudaGetDeviceProperties ( cudaDeviceProp* prop, int  device )
+```
+
+마찬가지로 함수에 전달한 cudaDeviceProp형 주소값인 prop을 역참조하여 device 번째에 해당하는 CUDA Device의 정보를 입력하고, 함수의 반환값으로는 에러의 유무를 전달한다. 이 API를 Go로 사용하기 위하여 아래와 같이 작성할 수 있다.
+
+```go
+import (
+    "encoding/hex"
+    "fmt"
+)
+
+func GetDeviceProperties(device int32) (C.struct_cudaDeviceProp, error) {
+    var prop C.struct_cudaDeviceProp
+    if C.cudaGetDeviceProperties(&prop, C.int(device)) != 0 {
+        return prop, ErrCUDAInvalidValue
+    }
+    c_uuid := []byte(C.GoString(&prop.uuid.bytes[0]))
+    uuid := make([]byte, hex.EncodedLen(len(c_uuid)))
+    hex.Encode(uuid, c_uuid)
+    fmt.Println("Name:", C.GoString(&prop.name[0]))
+    fmt.Println("UUID:", string(uuid))
+    fmt.Println("Total Global Memory:", prop.totalGlobalMem)
+    return prop, nil
+}
+```
+
+이때 C에서 정의된 struct cudaDeviceProp {...}과 같은 구조체는 C.struct_cudaDeviceProp과 같은 형태로 접근할 수 있다. 또한 C.GoString은 *_Ctype_char을 인자로 받기 때문에, []_Ctype_char 자료형인 prop.name을 &prop.name[0]의 형태로 참조하였다.
+
+```txt
+Hello, MLRD!
+GPU Device count: 1
+Name: NVIDIA GeForce GTX 1660 Ti
+UUID: cfd68e3d1d6d95b3e8240890188f0536
+Total Global Memory: 6441992192
+```
+
+하루종일 삽질한 결과 방법을 찾아낼 수 있었다.
+
+참고: [https://github.com/rapsealk/go-cuda](https://github.com/rapsealk/go-cuda)
