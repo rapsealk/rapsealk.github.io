@@ -165,11 +165,14 @@ module.exports = async ({ markdownAST, markdownNode }) => {
     const data = await getOg(url);
     if (!data) continue; // graceful fallback: leave the original link untouched
 
-    const image = data.image
-      ? `<img class="og-card-image" src="${escapeHtml(
-          data.image
-        )}" alt="" loading="lazy" decoding="async" />`
-      : "";
+    const thumbnail = data.image
+      ? escapeHtml(data.image)
+      : escapeHtml(
+          `https://www.google.com/s2/favicons?domain=${encodeURIComponent(
+            data.host
+          )}&sz=128`
+        );
+    const image = `<img class="og-card-image" src="${thumbnail}" alt="" loading="lazy" decoding="async" />`;
     const description = data.description
       ? `<span class="og-card-desc">${escapeHtml(data.description)}</span>`
       : "";
