@@ -61,5 +61,41 @@
     "description": null,
     "image": null,
     "host": "api.jquery.com"
+  },
+  "https://arxiv.org/abs/1312.5602": {
+    "title": "Playing Atari with Deep Reinforcement Learning",
+    "description": "We present the first deep learning model to successfully learn control policies directly from high-dimensional sensory input using reinforcement learning. The model is a convolutional neural network, trained with a variant of Q-learning, whose input is raw pixels and whose output is a value function estimating future rewards. We apply our method to seven Atari 2600 games from the Arcade Learning Environment, with no adjustment of the architecture or learning algorithm. We find that it outperforms all previous approaches on six of the games and surpasses a human expert on three of them.",
+    "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+    "host": "arxiv.org"
+  },
+  "https://www.backend.ai/ko/blog/2023-07-bitsandbytes-issue": {
+    "title": "bitsandbytes 이슈 삽질기",
+    "description": "NGC Catalog 컨테이너에서 특정 패키지를 실행할 때 발생한 오류를 추적하고 해결한 과정을 엔지니어의 시선으로 공유합니다.",
+    "image": "https://cdn.lablup.com/bitsandbytes_ko_2_c6907ba884.jpg",
+    "host": "www.backend.ai"
+  },
+  "https://ko.wikipedia.org/wiki/%ED%9D%A5%EB%B6%84%EC%84%B1_%EC%97%B0%EC%A0%91%ED%9B%84_%EC%A0%84%EC%9C%84": {
+    "title": "흥분성 시냅스후 전위 - 위키백과, 우리 모두의 백과사전",
+    "description": null,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Synapse_diag6.png?utm_source=ko.wikipedia.org&utm_campaign=index&utm_content=thumbnail_unscaled",
+    "host": "ko.wikipedia.org"
+  },
+  "https://github.com/rapsealk/go-cuda": {
+    "title": "GitHub - rapsealk/go-cuda",
+    "description": "Contribute to rapsealk/go-cuda development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/321a2a472700806320e139d78ab4af3cde1b1a5b6959e1bf138ca17c4648992d/rapsealk/go-cuda",
+    "host": "github.com"
+  },
+  "https://code.visualstudio.com/docs/containers/ssh": {
+    "title": "Connect to remote Docker over SSH",
+    "description": "Connect via SSH to Docker engine running on a remote machine and use the remote machine as a development environment for Visual Studio Code.",
+    "image": "https://code.visualstudio.com/opengraphimg/generated/docs/containers/ssh.webp",
+    "host": "code.visualstudio.com"
+  },
+  "https://ko.wikipedia.org/wiki/%EC%96%B5%EC%A0%9C%EC%84%B1_%EC%97%B0%EC%A0%91%ED%9B%84_%EC%A0%84%EC%9C%84": {
+    "title": "억제성 시냅스후 전위 - 위키백과, 우리 모두의 백과사전",
+    "description": null,
+    "image": null,
+    "host": "ko.wikipedia.org"
   }
 }
