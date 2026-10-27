@@ -49,6 +49,7 @@ module.exports = {
             },
           },
           `gatsby-remark-prismjs`,
+          `gatsby-remark-og-preview-cards`,
         ],
       },
     },
